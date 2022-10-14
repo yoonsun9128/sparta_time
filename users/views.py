@@ -1,7 +1,17 @@
-from django.shortcuts import render
+from socket import RDS_CMSG_RDMA_UPDATE
+from django.shortcuts import render,redirect
 from .models import User
 from django.http import HttpResponse
 # Create your views here.
 
 def signup(request):
-    return HttpResponse('회원가입 페이지')
+    if request.method == 'GET':
+        return render(request, 'signup.html')
+    elif request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        phone = request.POST.get('phone')
+        address = request.POST.get('address')
+        User.objects.create_user(username=username, password=password,phone=phone,address=address)
+        return redirect('users:login')
+        
