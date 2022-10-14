@@ -1,6 +1,7 @@
 from django.shortcuts import render,redirect
-from .models import User
 from django.http import HttpResponse
+from .models import User
+from django.contrib.auth import authenticate,login
 # Create your views here.
 
 def signup(request):
@@ -14,9 +15,20 @@ def signup(request):
         User.objects.create_user(username=username, password=password,phone=phone,address=address)
         return redirect('users:login')
 
-def login(request):
+def login_page(request):
     if request.method == 'GET':
         return render(request,'login.html')
     elif request.method == 'POST':
-        return HttpResponse('로그인 성공')
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(request, username=username, password=password)
+        if user is not None :
+            login(request,user)
+            return redirect('users:home')
+        else:
+            return HttpResponse('로그인 실패')
+
+def home(request):
+    return render('home.html')
+        
         
