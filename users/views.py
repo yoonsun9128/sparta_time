@@ -1,4 +1,3 @@
-from socket import RDS_CMSG_RDMA_UPDATE
 from django.shortcuts import render,redirect
 from .models import User
 from django.http import HttpResponse
@@ -14,4 +13,10 @@ def signup(request):
         address = request.POST.get('address')
         User.objects.create_user(username=username, password=password,phone=phone,address=address)
         return redirect('users:login')
+
+def login(request):
+    if request.method == 'GET':
+        return render(request,'login.html')
+    elif request.method == 'POST':
+        return HttpResponse('로그인 성공')
         
